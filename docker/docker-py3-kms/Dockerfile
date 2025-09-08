@@ -20,7 +20,8 @@ ENV TZ America/Chicago
 ENV WEBUI 1
 
 COPY docker/docker-py3-kms/requirements.txt /home/py-kms/
-RUN apk add --no-cache --update \
+RUN sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories && \
+  apk add --no-cache --update \
   bash \
   python3 \
   py3-pip \
@@ -28,7 +29,7 @@ RUN apk add --no-cache --update \
   ca-certificates \
   tzdata \
   shadow \
-  && pip3 install --no-cache-dir -r /home/py-kms/requirements.txt \
+  && pip3 install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple --no-cache-dir -r /home/py-kms/requirements.txt \
   && mkdir /db/ \
   && adduser -S py-kms -G users -s /bin/bash \
   && chown py-kms:users /home/py-kms \
